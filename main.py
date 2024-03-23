@@ -1,3 +1,4 @@
+from db.db import init_db
 from logger import app_logger
 import os
 from contextlib import asynccontextmanager
@@ -12,6 +13,7 @@ dotenv.load_dotenv()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app_logger.info('Start application')
+    init_db()
     yield
     app_logger.info('App stopped')
 
