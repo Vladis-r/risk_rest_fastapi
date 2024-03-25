@@ -1,10 +1,9 @@
 from datetime import datetime
+from typing import Optional
 
-from fastapi import HTTPException
 from fastapi.exceptions import RequestValidationError
-from pydantic import model_validator, field_validator, ValidationError, BaseModel
+from pydantic import field_validator
 from sqlmodel import SQLModel, Field
-from typing import Optional, ClassVar
 
 
 class DepositBase(SQLModel):
@@ -40,7 +39,7 @@ class DepositBase(SQLModel):
     @classmethod
     def validate_rate(cls, v: float) -> float:
         if not 1 <= v <= 8:
-            raise RequestValidationError('Incorrect interest on deposit. Must be from 1 to 8.')
+            raise RequestValidationError('Incorrect rate on deposit. Must be from 1 to 8.')
         return v
 
 

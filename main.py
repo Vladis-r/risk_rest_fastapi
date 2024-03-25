@@ -1,16 +1,16 @@
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import ORJSONResponse
-
-from db.db import init_db
-from db.models import Deposit, DepositBase
-from services.deposit import deposit_service
-from logger import app_logger
 import os
+from logger import app_logger
 from contextlib import asynccontextmanager
 
 import uvicorn
 import dotenv
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import ORJSONResponse
+
+from db.db import init_db
+from db.models import DepositBase
+from services.deposit import deposit_service
 
 dotenv.load_dotenv()
 
@@ -33,14 +33,10 @@ async def validation_exception_handler(request: Request, exc: [RequestValidation
 
 
 # VIEWS
-@app.post("/deposit_calculation", status_code=200)
+@app.post("/deposit_calculation", status_code=200, responses={400: {'content': {'application/json': {'example': {'error': 'error message'}}}},
+                                                                200: {'content': {'application/json': {'example': {'date': 'amount', 'date_x': 'amount_x'}}}}})
 async def get_deposit_calculation(deposit: DepositBase):
     return deposit_service.calculate_deposit(deposit)
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 
 if __name__ == "__main__":
