@@ -17,6 +17,7 @@ dotenv.load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Загрузка БД, при необходимости"""
     app_logger.info('Start application')
     # init_db()
     yield
@@ -27,7 +28,8 @@ app = FastAPI(lifespan=lifespan)
 
 # EXCEPTION HANDLER
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: [RequestValidationError|ValueError]):
+async def validation_exception_handler(request: Request, exc: [RequestValidationError]) -> ORJSONResponse:
+    """Меняем формат вывода ошибки валидации"""
     error_msg = {'error': str(exc)}
     return ORJSONResponse(error_msg, status_code=400)
 
@@ -35,7 +37,8 @@ async def validation_exception_handler(request: Request, exc: [RequestValidation
 # VIEWS
 @app.post("/deposit_calculation", status_code=200, responses={400: {'content': {'application/json': {'example': {'error': 'error message'}}}},
                                                                 200: {'content': {'application/json': {'example': {'date': 'amount', 'date_x': 'amount_x'}}}}})
-async def get_deposit_calculation(deposit: DepositBase):
+async def get_deposit_calculation(deposit: DepositBase) -> dict:
+    """Калькуляция для депозита"""
     return deposit_service.calculate_deposit(deposit)
 
 

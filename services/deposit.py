@@ -1,8 +1,11 @@
 import calendar
 
+from db.models import DepositBase
+
 
 class DepositService:
-    def calculate_deposit(self, deposit):
+    def calculate_deposit(self, deposit: DepositBase) -> dict:
+        """Расчёт депозита"""
         result = {}
         amount = deposit.amount
         date_map = self._get_dates(deposit)
@@ -11,7 +14,8 @@ class DepositService:
             result[date_map[period]] = round(amount, 2)
         return result
 
-    def _get_dates(self, deposit):
+    def _get_dates(self, deposit: DepositBase) -> list[str]:
+        """Получаем список с датой последнего дня каждого месяца в формате dd.mm.YYYY"""
         date_map = []
         date = deposit.date
         day, month, year = [int(i) for i in date.split('.')]
