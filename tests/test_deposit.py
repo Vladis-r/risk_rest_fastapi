@@ -61,6 +61,6 @@ async def test_get_deposit_calculation_invalid_rate(ac_client: AsyncClient):
     }
     resp = await ac_client.post('/deposit_calculation', json=data)
     assert resp.status_code == 400
-    assert resp.json() == {'error': 'Incorrect interest on deposit. Must be from 1 to 8.'}
+    assert resp.json() == {'error': 'Incorrect rate on deposit. Must be from 1 to 8.'}
 
 
