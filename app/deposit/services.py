@@ -1,6 +1,6 @@
 import calendar
 
-from db.models import DepositBase
+from app.deposit.models import DepositBase
 
 
 class DepositService:

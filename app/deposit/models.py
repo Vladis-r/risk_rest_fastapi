@@ -13,7 +13,6 @@ class DepositBase(SQLModel):
     rate: float = Field(..., description='Процент по вкладу')
 
     @field_validator("date")
-    @classmethod
     def validate_date_format(cls, v: str) -> str:
         try:
             datetime.strptime(v, '%d.%m.%Y')

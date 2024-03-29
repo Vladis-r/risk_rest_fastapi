@@ -1,10 +1,13 @@
 import asyncio
-from typing import AsyncGenerator
+import os
 
 import pytest
+from typing import AsyncGenerator
 from httpx import AsyncClient, ASGITransport
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
 
-from main import app
+from app.main import app
 
 
 @pytest.fixture(scope="session")
@@ -20,3 +23,10 @@ async def ac_client() -> AsyncGenerator[AsyncClient, None]:
     """Получить асинхронный клиент для тестирования"""
     async with AsyncClient(transport=ASGITransport(app=app), base_url='http://test') as ac_client:
         yield ac_client
+
+
+@pytest.fixture(scope="session")
+async def async_session_test():
+    engine = create_async_engine(os.getenv('TEST_DATABASE_URL'), future=True, echo=True)
+    async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+    yield async_session()
