@@ -8,7 +8,7 @@ from fastapi import FastAPI, APIRouter
 from app import exceptions
 from app.deposit.router import deposit_router
 from app.database import init_db
-from logger import app_logger
+from app.logger import app_logger
 
 dotenv.load_dotenv()
 
@@ -16,7 +16,7 @@ dotenv.load_dotenv()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Загрузка БД, при необходимости"""
-    app_logger.debug('Start application')
+    app_logger.info('Start application')
     # init_db()
     yield
     app_logger.info('App stopped')

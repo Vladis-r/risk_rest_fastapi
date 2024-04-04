@@ -9,7 +9,7 @@ logging.basicConfig(
 )
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-fh = logging.FileHandler(f'{os.getcwd()}/logs/app_logger.log')
+fh = logging.FileHandler(f'{os.getcwd()}/app/logs/app_logger.log')
 # fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 # app_logger.addHandler(fh)

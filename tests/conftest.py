@@ -14,6 +14,7 @@ from app.main import app
 def event_loop():
     """Получаем loop для избежания проблем с асинхронными тестами"""
     loop = asyncio.get_event_loop()
+    # loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
 
@@ -26,7 +27,8 @@ async def ac_client() -> AsyncGenerator[AsyncClient, None]:
 
 
 @pytest.fixture(scope="session")
-async def async_session_test():
-    engine = create_async_engine(os.getenv('TEST_DATABASE_URL'), future=True, echo=True)
+async def async_db_session():
+    """Соединение с тестовой базой"""
+    engine = create_async_engine(os.getenv('TEST_DB_URL'), future=True, echo=True)
     async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
     yield async_session()
