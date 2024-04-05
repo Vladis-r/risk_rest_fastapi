@@ -18,8 +18,12 @@ async def lifespan(app: FastAPI):
     yield
     app_logger.info('App stopped')
 
+app_configs = {}
+if not settings.is_debug:
+    app_configs['openapi_url'] = None
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, **app_configs)
+
 
 main_api_router = APIRouter()
 main_api_router.include_router(deposit_router, prefix='/deposit', tags=['deposit'])
