@@ -1,7 +1,5 @@
-import os
 from contextlib import asynccontextmanager
 import uvicorn
-import dotenv
 from fastapi import FastAPI, APIRouter
 
 
@@ -9,8 +7,7 @@ from app import exceptions
 from app.deposit.router import deposit_router
 from app.database import init_db
 from app.logger import app_logger
-
-dotenv.load_dotenv()
+from app.settings import settings
 
 
 @asynccontextmanager
@@ -32,4 +29,4 @@ exceptions.include_exc(app)
 
 
 if __name__ == "__main__":
-    uvicorn.run(os.getenv('APP_NAME'), host=os.getenv('APP_HOST'), port=int(os.getenv('APP_PORT')), log_level="info")
+    uvicorn.run(settings.app_name, host=settings.app_host, port=settings.app_port, log_level="info")
